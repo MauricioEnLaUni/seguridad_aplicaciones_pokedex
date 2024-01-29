@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  pokedata:
+    container_name: pokedata
+    image: cgr.dev/chainguard/postgres@sha256:9a559581f2c028e63ff7ddb43ca49692b388eae2b8d3055d650553eee8f84ae6
+    restart: unless-stopped
+    env_file:
+      - ./secrets/raw/postgres.env
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - persistence
+
+networks:
+  persistence:
+  auth:
+
+volumes:
+  app_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vols/app_data
+  auth_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vols/auth_data
+  auth_realms:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vols/realms
+  logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vols/logs
+  auth_certs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./vols/secrets/raw/auth_certs
